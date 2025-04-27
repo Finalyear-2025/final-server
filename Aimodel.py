@@ -6,7 +6,7 @@ import requests
 
 MODEL_PATH = "breast_ultrasound_model_final.h5"
 model = tf.keras.models.load_model(MODEL_PATH)
-
+model.save("new_model.keras")
 # Label encoder setup
 label_encoder = LabelEncoder()
 label_encoder.classes_ = np.array(['benign', 'malignant', 'normal'])
@@ -39,16 +39,6 @@ def predict_numeric_severity(image_path, img_size=(128, 128)):
 
     if image is None:
         return {"error": "Error loading image from URL"}
-    # try:
-    #     # in_memory_file = np.frombuffer(image_path.read(), np.uint8)
-    #     in_memory_file = np.frombuffer(image_path, np.uint8)  # ✅ GOOD
-    #     image = cv2.imdecode(in_memory_file, cv2.IMREAD_GRAYSCALE)
-    # except Exception as e:
-    #     return {"error": f"Error decoding image: {str(e)}"}
-
-    # if image is None:
-    #     return {"error": "Error loading image"}
-
     image_resized = cv2.resize(image, img_size)
     image_resized = np.expand_dims(image_resized, axis=-1)
     image_resized = image_resized / 255.0
