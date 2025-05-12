@@ -43,7 +43,7 @@ def plot_png():
 
     current_user=get_jwt_identity()
     user = mongo.db.users.find_one({"username": current_user})
-    print(user)
+    # print(user)
     if not user or 'uploads' not in user:
         return jsonify([])
     upload_ids = user['uploads']
@@ -52,7 +52,7 @@ def plot_png():
         {"_id": 0, "severity_level": 1, "date": 1,"confidence":1}  # exclude _id if you want
     ))
     
-    print(upload_docs)
+    # print(upload_docs)
     for doc in upload_docs:
         if "severity_level" in doc and "date" in doc:
             severity_list.append(int(doc["severity_level"]))  # Convert to int just in case
@@ -67,7 +67,7 @@ def plot_png():
 
 
     risk_labels = [generate_risk_report(conf, sev) for conf, sev in zip(confidence_list, severity_list)]
-    print(risk_labels)
+    # print(risk_labels)
     plt.figure(figsize=(12, 6))
     x_vals = date_list
 
@@ -78,7 +78,7 @@ def plot_png():
 
     plt.axhline(y=80, color='red', linestyle='--', label='80% Threshold')
 
-    plt.title("Confidence Scores with Risk Assessment")
+    # plt.title("Confidence Scores with Risk Assessment")
     plt.xlabel("Date")
     plt.ylabel("Confidence (%)")
     plt.ylim(0, 110)

@@ -49,14 +49,18 @@ def upload_image():
     predicted_class = answer['prediction']       # → 'benign'
     confidence_score = answer['confidence']      # → '94.98%'
     severity_text = answer['severity']           # → 'Low severity'
-    severity_level = answer['severity_level']
+    severity_level = 0
+    if(predicted_class=='malignant'):
+        severity_level=2
+    elif(predicted_class=='benign'):
+        severity_level=1
     store_user_data(patient_name,patient_age,predicted_class,confidence_score,severity_text,severity_level,filepath,current_user)
     response = {
         "message": "File uploaded successfully",
         "prediction": answer['prediction'],
         "confidence": answer['confidence'],
         "severity": answer['severity'],
-        "severity_level": answer['severity_level'],
+        "severity_level": severity_level,
         "image_url": filepath
     }
     return jsonify(response)                   
@@ -65,7 +69,7 @@ def upload_image():
 @jwt_required()
 def get_history():
     current_user=get_jwt_identity()
-    print(current_user)
+    # print(current_user)
     # history_data = list(mongo.db.user_data.find({}, {"_id": 0}))
     # print(history_data)
     user = mongo.db.users.find_one({"username": current_user})
